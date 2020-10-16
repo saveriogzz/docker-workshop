@@ -6,11 +6,13 @@ services:
             - POSTGRES_USER=airflow
             - POSTGRES_PASSWORD=airflow
             - POSTGRES_DB=airflow
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data/pgdata
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
-
     webserver:
         image: saveriogzz/ruisdael-airflow:0.3
         restart: on-failure
@@ -27,7 +29,7 @@ services:
         volumes:
             - ./dags:/usr/local/airflow/dags
             - ./plugins:/usr/local/airflow/plugins
-            - ~/.ssh:/usr/local/airflow/.ssh:ro
+            - ~/.ssh:/usr/local/airflow/.ssh
             - ./requirements.txt:/requirements.txt
         ports:
             - "8080:8080"
